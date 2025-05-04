@@ -1,12 +1,18 @@
-FROM node:14
+FROM node:20-slim
 
-WORKDIR /usr/src/app
+ARG VERSION=3.2.3
 
-COPY package*.json ./
-RUN npm install gitbook-cli -g
+LABEL version=$VERSION
 
-COPY . .
+RUN npm install --global gitbook-cli &&\
+	gitbook fetch ${VERSION} &&\
+	npm cache clear &&\
+	rm -rf /tmp/*
 
-EXPOSE 4000
+WORKDIR /srv/gitbook
 
-CMD ["gitbook", "serve"]
+VOLUME /srv/gitbook /srv/html
+
+EXPOSE 4000 35729
+
+CMD /usr/local/bin/gitbook serve
