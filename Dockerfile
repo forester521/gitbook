@@ -1,4 +1,4 @@
-FROM node:23-slim
+FROM node:18-slim
 
 ARG VERSION=3.2.3
 
